@@ -24,13 +24,19 @@ const studentCounts = {
         "area X": 1000
     },
     "School B": {
-        "area Y": 900
+        "area X": 900
     },
     "School C": {
-        "area Z": 2000
+        "area Y": 2000
     },
     "School D": {
-        "area W": 1500
+        "area Y": 1500
+    },
+    "School E":{
+        "area Z":1200
+    },
+    "School F":{
+        "area Z":1670
     }
 };
 
@@ -73,7 +79,7 @@ function handlePolicyChange() {
     });
 
     ratee.style.display = "none";
-    
+
     // Show the selected option
     if (selectedPolicy !== '') {
         const selectDiv = document.getElementById(`${selectedPolicy}Select`);
