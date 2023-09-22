@@ -59,6 +59,9 @@ function populateSelect(selectElement, data) {
     });
 }
 
+const dataform = document.getElementById("dataForm"); // Make sure your form has id="dataForm"
+const ratee = document.getElementById("dropoutRate");
+
 // Function to handle policy change
 function handlePolicyChange() {
     const selectedPolicy = policySelect.value;
@@ -69,6 +72,8 @@ function handlePolicyChange() {
         selectDiv.style.display = 'none';
     });
 
+    ratee.style.display = "none";
+    
     // Show the selected option
     if (selectedPolicy !== '') {
         const selectDiv = document.getElementById(`${selectedPolicy}Select`);
@@ -149,3 +154,9 @@ policySelect.addEventListener('change', updateDropoutRate);
 
 // Initial update of dropout rate when the page loads
 updateDropoutRate();
+
+
+dataform.addEventListener("submit", (event) => {
+    event.preventDefault(); // Prevent the default form submission behavior
+    ratee.style.display = "block";
+});

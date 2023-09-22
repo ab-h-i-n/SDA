@@ -4,10 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>School Dropout Analyzer</title>
+    <link rel="stylesheet" href="./style.css">
 </head>
 <body>
     <h1>School Dropout Analyzer</h1>
-    <form action="process_data.php" method="post" id="dataForm">
+    <form id="dataForm">
         <label for="policy">Select Policy:</label>
         <select id="policy" name="policy">
             <option value="school">School Wise</option>
@@ -51,7 +52,7 @@
 
         <input type="submit" value="Submit">
     </form>
-    <div id="dropoutRate"></div>
+    <div id="dropoutRate" style="display: none;"></div>
     <script type="module" src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
     <script type="module" src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js"></script>
     <script type="module" src="./script.js"></script>
