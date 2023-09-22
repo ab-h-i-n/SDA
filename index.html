@@ -1,1 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Dropout Analyzer</title>
+</head>
+<body>
+    <h1>School Dropout Analyzer</h1>
+    <form action="process_data.php" method="post" id="dataForm">
+        <label for="policy">Select Policy:</label>
+        <select id="policy" name="policy">
+            <option value="school">School Wise</option>
+            <option value="area">Area Wise</option>
+            <option value="gender">Gender Wise</option>
+            <option value="caste">Caste Wise</option>
+            <option value="age">Age Wise</option>
+        </select>
+        <br><br>
 
+        <!-- Selection Divs for Policy Types (Initially Hidden) -->
+        <div id="schoolSelect" style="display: none;">
+            <label for="school">Select School:</label>
+            <select id="school" name="school"></select>
+            <br><br>
+        </div>
+
+        <div id="ageSelect" style="display: none;">
+            <label for="age">Select Age:</label>
+            <select id="age" name="age"></select>
+            <br><br>
+        </div>
+
+        <div id="casteSelect" style="display: none;">
+            <label for="caste">Select Caste:</label>
+            <select id="caste" name="caste"></select>
+            <br><br>
+        </div>
+
+        <div id="areaSelect" style="display: none;">
+            <label for="area">Select Area:</label>
+            <select id="area" name="area"></select>
+            <br><br>
+        </div>
+
+        <div id="genderSelect" style="display: none;">
+            <label for="gender">Select Gender:</label>
+            <select id="gender" name="gender"></select>
+            <br><br>
+        </div>
+
+        <input type="submit" value="Submit">
+    </form>
+    <div id="dropoutRate"></div>
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js"></script>
+    <script type="module" src="./script.js"></script>
+</body>
+</html>
