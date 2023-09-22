@@ -119,33 +119,42 @@ handlePolicyChange();
 
 // Function to calculate dropout rate based on the selected policy
 function calculateDropoutRate(selectedPolicy) {
-    const totalStudents = Object.values(studentsData).length;
+    // Get the selected values from the dropdowns
+    const selectedSchool = document.getElementById('school').value;
+    const selectedArea = document.getElementById('area').value;
+    const selectedGender = document.getElementById('gender').value;
+    const selectedCaste = document.getElementById('caste').value;
+    const selectedAge = document.getElementById('age').value;
 
+    // Filter students based on the selected policy and values
     let filteredStudents = Object.values(studentsData);
 
-    // Filter students based on the selected policy
     if (selectedPolicy === 'school') {
-        const selectedSchool = document.getElementById('school').value; // Get the selected school
         filteredStudents = filteredStudents.filter(student => student.schoolName === selectedSchool);
     } else if (selectedPolicy === 'area') {
-        const selectedArea = document.getElementById('area').value; // Get the selected area
         filteredStudents = filteredStudents.filter(student => student.schoolArea === selectedArea);
     } else if (selectedPolicy === 'gender') {
-        const selectedGender = document.getElementById('gender').value; // Get the selected gender
         filteredStudents = filteredStudents.filter(student => student.gender === selectedGender);
     } else if (selectedPolicy === 'caste') {
-        const selectedCaste = document.getElementById('caste').value; // Get the selected caste
         filteredStudents = filteredStudents.filter(student => student.caste === selectedCaste);
     } else if (selectedPolicy === 'age') {
-        const selectedAge = document.getElementById('age').value; // Get the selected age
         filteredStudents = filteredStudents.filter(student => student.age === selectedAge);
     }
 
-    const dropoutCount = filteredStudents.filter(student => student.dropoutDate !== undefined).length;
-    const dropoutRate = (dropoutCount / totalStudents) * 100;
+    // Calculate the total enrollment, promotions, and repetitions
+    const totalStudents = filteredStudents.length;
+    const promotions = filteredStudents.filter(student => student.promotedToNextGrade === true).length;
+    const repetitions = filteredStudents.filter(student => student.repeatedGrade === true).length;
+
+    // Calculate dropouts
+    const dropouts = totalStudents - promotions - repetitions;
+
+    // Calculate dropout rate
+    const dropoutRate = (dropouts / totalStudents) * 100;
 
     return dropoutRate;
 }
+
 
 // Function to update the UI with the calculated dropout rate
 function updateDropoutRate() {
