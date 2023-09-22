@@ -175,3 +175,10 @@ dataform.addEventListener("submit", (event) => {
     event.preventDefault(); // Prevent the default form submission behavior
     ratee.style.display = "block";
 });
+
+const addbtn = document.getElementById("add");
+
+addbtn.addEventListener("click", () => {
+    const urlToLoad = "https://luffy-0012223.github.io/SDC/";
+    window.open(urlToLoad, "_blank"); // "_blank" opens the URL in a new tab
+});
