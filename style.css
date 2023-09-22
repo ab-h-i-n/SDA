@@ -47,6 +47,10 @@ h1{
     position: relative;
 }
 
+.main select option, .main select{
+    color: black;
+}
+
 form{
     width: 50vw;
     height: 50vh;
