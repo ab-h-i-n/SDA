@@ -5,6 +5,10 @@
     box-sizing: border-box;
     font-family: 'Poppins', sans-serif;
 }
+body{
+    color: white;
+    background-color: rgb(15, 13, 13);
+}
 header{
     background-color: blueviolet;
     min-height: 70px;
