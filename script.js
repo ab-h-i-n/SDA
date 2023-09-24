@@ -19,6 +19,7 @@ const db = getDatabase();
 // Reference to the database node where you want to set the student counts
 const areaRef = ref(db, 'area'); // Update this path if needed
 const studentRef = ref(db, 'schools');
+const ageRef = ref(db,'ages');
 
 const studentCounts = {
     "area X": {
@@ -79,6 +80,33 @@ const schoolDetails = {
         "Christian": 72
     }
 };
+
+const ageGroupData = {
+    "10-15": {
+        "School A": 35,
+        "School B": 70,
+        "School C": 80,
+        "School D": 60,
+        "School E": 50,
+        "School F": 60
+    },
+    "15-20": {
+        "School A": 65,
+        "School B": 120,
+        "School C": 120,
+        "School D": 90,
+        "School E": 70,
+        "School F": 100
+    }
+};
+
+set(ageRef, ageGroupData)
+.then(()=>{
+    console.log("Age details have been set succesfuly");
+})
+.catch((error)=>{
+    console.error("Error!",error);
+})
 
 
 set(studentRef, schoolDetails)
@@ -225,6 +253,12 @@ function calculateDropoutRate(selectedPolicy) {
         const studentAge = parseInt(student.age, 10);
         return studentAge >= minAge && studentAge <= maxAge;
     });
+
+    if (selectedAge === '10-15') {
+        totalStudents = Object.values(ageGroupData['10-15']).reduce((acc, count) => acc + count, 0);
+    } else {
+        totalStudents = Object.values(ageGroupData['15-20']).reduce((acc, count) => acc + count, 0);
+    }
     }
 
     // Calculate the total enrollment
