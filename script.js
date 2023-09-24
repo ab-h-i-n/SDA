@@ -17,7 +17,8 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase();
 
 // Reference to the database node where you want to set the student counts
-const schoolsRef = ref(db, 'schools'); // Update this path if needed
+const areaRef = ref(db, 'area'); // Update this path if needed
+const studentRef = ref(db, 'schools');
 
 const studentCounts = {
     "area X": {
@@ -34,8 +35,62 @@ const studentCounts = {
     }
 };
 
+const schoolDetails = {
+    "School A": {
+        "Male": 50,
+        "Female": 50,
+        "Hindu": 30,
+        "Muslim": 25,
+        "Christian": 45
+    },
+    "School B": {
+        "Male": 95,
+        "Female": 95,
+        "Hindu": 57,
+        "Muslim": 47,
+        "Christian": 86
+    },
+    "School C": {
+        "Male": 100,
+        "Female": 100,
+        "Hindu": 60,
+        "Muslim": 50,
+        "Christian": 90
+    },
+    "School D": {
+        "Male": 75,
+        "Female": 75,
+        "Hindu": 45,
+        "Muslim": 37,
+        "Christian": 68
+    },
+    "School E": {
+        "Male": 60,
+        "Female": 60,
+        "Hindu": 36,
+        "Muslim": 30,
+        "Christian": 54
+    },
+    "School F": {
+        "Male": 80,
+        "Female": 80,
+        "Hindu": 48,
+        "Muslim": 40,
+        "Christian": 72
+    }
+};
+
+
+set(studentRef, schoolDetails)
+.then(()=>{
+    console.log("School details have been set succesfuly");
+})
+.catch((error)=>{
+    console.error("Error!",error);
+})
+
 // Set the student counts in the database
-set(schoolsRef, studentCounts)
+set(areaRef, studentCounts)
     .then(() => {
         console.log("Student counts have been set successfully.");
     })
@@ -94,17 +149,13 @@ onValue(studentsRef, snapshot => {
     const schoolSelect = document.getElementById('school');
 
     // Create arrays to store unique values for each field
-    const uniqueAges = [...new Set(Object.values(studentsData).map(student => student.age))];
     const uniqueCastes = [...new Set(Object.values(studentsData).map(student => student.caste))];
     const uniqueAreas = [...new Set(Object.values(studentsData).map(student => student.schoolArea))];
-    const uniqueGenders = [...new Set(Object.values(studentsData).map(student => student.gender))];
     const uniqueSchools = [...new Set(Object.values(studentsData).map(student => student.schoolName))];
 
     // Populate the dropdowns with unique values
-    populateSelect(ageSelect, uniqueAges);
     populateSelect(casteSelect, uniqueCastes);
     populateSelect(areaSelect, uniqueAreas);
-    populateSelect(genderSelect, uniqueGenders);
     populateSelect(schoolSelect, uniqueSchools);
 
     // Attach event listeners to the second select options
@@ -124,15 +175,10 @@ handlePolicyChange();
 function calculateDropoutRate(selectedPolicy) {
     // Get the selected values from the dropdowns
     const selectedSchool = document.getElementById('school').value;
-    console.log(selectedSchool);
     const selectedArea = document.getElementById('area').value;
-    console.log(selectedArea);
     const selectedGender = document.getElementById('gender').value;
-    console.log(selectedGender);
     const selectedCaste = document.getElementById('caste').value;
-    console.log(selectedCaste);
     const selectedAge = document.getElementById('age').value;
-    console.log(selectedAge);
 
     // Filter students based on the selected policy and values
     let filteredStudents = Object.values(studentsData);
@@ -140,35 +186,45 @@ function calculateDropoutRate(selectedPolicy) {
     let totalStudents = 0;
 
     if (selectedPolicy === 'school') {
-
-        if(selectedSchool == 'School A'){
-            totalStudents = 100;
-        }else if(selectedSchool == 'School B'){
-            totalStudents = 190;
-        }else if(selectedSchool == 'School C'){
-            totalStudents = 200;
-        }else if(selectedSchool == 'School D'){
-            totalStudents = 150;
-        }else if(selectedSchool == 'School E'){
-            totalStudents = 120;
-        }else if(selectedSchool == 'School F'){
-            totalStudents = 160;
+        filteredStudents = filteredStudents.filter(student => student.schoolName === selectedSchool);
+        if (schoolDetails[selectedSchool]) {
+            // Get the total students for the selected school
+            totalStudents = schoolDetails[selectedSchool].Male + schoolDetails[selectedSchool].Female;
         }
     } else if (selectedPolicy === 'area') {
         // Assuming you have a variable selectedArea containing the selected area name
+        filteredStudents = filteredStudents.filter(student => student.schoolArea === selectedArea);
         if (studentCounts[selectedArea]) {
             // Calculate the total students in the selected area by summing the counts of all schools in that area
             totalStudents = Object.values(studentCounts[selectedArea]).reduce((acc, count) => acc + count, 0);
         }
     } else if (selectedPolicy === 'gender') {
         filteredStudents = filteredStudents.filter(student => student.gender === selectedGender);
-        console.log(filteredStudents);
+        if (selectedGender === 'Female') {
+            // Calculate the total students as the sum of all females in all schools
+            totalStudents = Object.values(schoolDetails).reduce((acc, school) => acc + (school.Female || 0), 0);
+        } else {
+            totalStudents = Object.values(schoolDetails).reduce((acc, school) => acc + (school.Male || 0), 0);
+        }
     } else if (selectedPolicy === 'caste') {
         filteredStudents = filteredStudents.filter(student => student.caste === selectedCaste);
-        console.log(filteredStudents);
+        if (selectedCaste === 'Hindu') {
+            // Calculate the total students as the sum of all females in all schools
+            totalStudents = Object.values(schoolDetails).reduce((acc, school) => acc + (school.Hindu || 0), 0);
+        } else if(selectedCaste === 'Muslim'){
+            totalStudents = Object.values(schoolDetails).reduce((acc, school) => acc + (school.Muslim || 0), 0);
+        }else{
+            totalStudents = Object.values(schoolDetails).reduce((acc,school) => acc + (school.Christian || 0),0);
+        }
     } else if (selectedPolicy === 'age') {
-        filteredStudents = filteredStudents.filter(student => student.age === selectedAge);
-        console.log(filteredStudents);
+        const ageRange = selectedAge.split('-'); // Split the selectedAge into [min, max]
+    const minAge = parseInt(ageRange[0], 10);
+    const maxAge = parseInt(ageRange[1], 10);
+
+    filteredStudents = filteredStudents.filter(student => {
+        const studentAge = parseInt(student.age, 10);
+        return studentAge >= minAge && studentAge <= maxAge;
+    });
     }
 
     // Calculate the total enrollment
