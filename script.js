@@ -1,7 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
 import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js";
 
-// Your Firebase configuration
+//  Firebase configuration
 const firebaseConfig = {
     apiKey: "AIzaSyB-DAFObbV9nV4eBGirHnR15cqwB0GTvVM",
     authDomain: "fir-dc-ae2fa.firebaseapp.com",
@@ -21,22 +21,22 @@ const schoolsRef = ref(db, 'schools'); // Update this path if needed
 
 const studentCounts = {
     "School A": {
-        "area X": 1000
+        "area X": 10
     },
     "School B": {
-        "area X": 900
+        "area X": 19
     },
     "School C": {
-        "area Y": 2000
+        "area Y": 20
     },
     "School D": {
-        "area Y": 1500
+        "area Y": 15
     },
     "School E":{
-        "area Z":1200
+        "area Z":12
     },
     "School F":{
-        "area Z":1670
+        "area Z":16
     }
 };
 
@@ -131,30 +131,32 @@ function calculateDropoutRate(selectedPolicy) {
 
     if (selectedPolicy === 'school') {
         filteredStudents = filteredStudents.filter(student => student.schoolName === selectedSchool);
+        console.log(filteredStudents);
     } else if (selectedPolicy === 'area') {
         filteredStudents = filteredStudents.filter(student => student.schoolArea === selectedArea);
+        console.log(filteredStudents);
     } else if (selectedPolicy === 'gender') {
         filteredStudents = filteredStudents.filter(student => student.gender === selectedGender);
+        console.log(filteredStudents);
     } else if (selectedPolicy === 'caste') {
         filteredStudents = filteredStudents.filter(student => student.caste === selectedCaste);
+        console.log(filteredStudents);
     } else if (selectedPolicy === 'age') {
         filteredStudents = filteredStudents.filter(student => student.age === selectedAge);
+        console.log(filteredStudents);
     }
 
-    // Calculate the total enrollment, promotions, and repetitions
+    // Calculate the total enrollment
     const totalStudents = filteredStudents.length;
-    const promotions = filteredStudents.filter(student => student.promotedToNextGrade === true).length;
-    const repetitions = filteredStudents.filter(student => student.repeatedGrade === true).length;
-
-    // Calculate dropouts
-    const dropouts = totalStudents - promotions - repetitions;
 
     // Calculate dropout rate
-    const dropoutRate = (dropouts / totalStudents) * 100;
+    let dropoutRate = 0;
+    if (totalStudents > 0) {
+        dropoutRate = (totalStudents / totalStudents) * 100;
+    }
 
     return dropoutRate;
 }
-
 
 // Function to update the UI with the calculated dropout rate
 function updateDropoutRate() {
