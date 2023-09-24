@@ -20,23 +20,17 @@ const db = getDatabase();
 const schoolsRef = ref(db, 'schools'); // Update this path if needed
 
 const studentCounts = {
-    "School A": {
-        "area X": 10
+    "area X": {
+        "School A": 100,
+        "School B": 190
     },
-    "School B": {
-        "area X": 19
+    "area Y": {
+        "School C": 200,
+        "School D":150
     },
-    "School C": {
-        "area Y": 20
-    },
-    "School D": {
-        "area Y": 15
-    },
-    "School E":{
-        "area Z":12
-    },
-    "School F":{
-        "area Z":16
+    "area Z": {
+        "School E": 120,
+        "School F": 160
     }
 };
 
@@ -65,7 +59,7 @@ function populateSelect(selectElement, data) {
     });
 }
 
-const dataform = document.getElementById("dataForm"); // Make sure your form has id="dataForm"
+const dataform = document.getElementById("dataForm");
 const ratee = document.getElementById("dropoutRate");
 
 // Function to handle policy change
@@ -112,29 +106,60 @@ onValue(studentsRef, snapshot => {
     populateSelect(areaSelect, uniqueAreas);
     populateSelect(genderSelect, uniqueGenders);
     populateSelect(schoolSelect, uniqueSchools);
+
+    // Attach event listeners to the second select options
+    areaSelect.addEventListener('change', updateDropoutRate);
+    genderSelect.addEventListener('change', updateDropoutRate);
+    casteSelect.addEventListener('change', updateDropoutRate);
+    ageSelect.addEventListener('change', updateDropoutRate);
+    schoolSelect.addEventListener('change',updateDropoutRate);
 });
+
 
 // Initial policy change to set up the form
 handlePolicyChange();
+
 
 // Function to calculate dropout rate based on the selected policy
 function calculateDropoutRate(selectedPolicy) {
     // Get the selected values from the dropdowns
     const selectedSchool = document.getElementById('school').value;
+    console.log(selectedSchool);
     const selectedArea = document.getElementById('area').value;
+    console.log(selectedArea);
     const selectedGender = document.getElementById('gender').value;
+    console.log(selectedGender);
     const selectedCaste = document.getElementById('caste').value;
+    console.log(selectedCaste);
     const selectedAge = document.getElementById('age').value;
+    console.log(selectedAge);
 
     // Filter students based on the selected policy and values
     let filteredStudents = Object.values(studentsData);
 
+    let totalStudents = 0;
+
     if (selectedPolicy === 'school') {
-        filteredStudents = filteredStudents.filter(student => student.schoolName === selectedSchool);
-        console.log(filteredStudents);
+
+        if(selectedSchool == 'School A'){
+            totalStudents = 100;
+        }else if(selectedSchool == 'School B'){
+            totalStudents = 190;
+        }else if(selectedSchool == 'School C'){
+            totalStudents = 200;
+        }else if(selectedSchool == 'School D'){
+            totalStudents = 150;
+        }else if(selectedSchool == 'School E'){
+            totalStudents = 120;
+        }else if(selectedSchool == 'School F'){
+            totalStudents = 160;
+        }
     } else if (selectedPolicy === 'area') {
-        filteredStudents = filteredStudents.filter(student => student.schoolArea === selectedArea);
-        console.log(filteredStudents);
+        // Assuming you have a variable selectedArea containing the selected area name
+        if (studentCounts[selectedArea]) {
+            // Calculate the total students in the selected area by summing the counts of all schools in that area
+            totalStudents = Object.values(studentCounts[selectedArea]).reduce((acc, count) => acc + count, 0);
+        }
     } else if (selectedPolicy === 'gender') {
         filteredStudents = filteredStudents.filter(student => student.gender === selectedGender);
         console.log(filteredStudents);
@@ -147,20 +172,21 @@ function calculateDropoutRate(selectedPolicy) {
     }
 
     // Calculate the total enrollment
-    const totalStudents = filteredStudents.length;
+    const NumOfStudents = filteredStudents.length;
 
     // Calculate dropout rate
     let dropoutRate = 0;
-    if (totalStudents > 0) {
-        dropoutRate = (totalStudents / totalStudents) * 100;
-    }
+    if (NumOfStudents > 0) {
+        dropoutRate = (NumOfStudents / totalStudents) * 100;
+    }    
+    console.log(`Number of students : ${NumOfStudents} \n totalStudents : ${totalStudents} \n Dropout Rate : ${dropoutRate}`)
 
     return dropoutRate;
 }
 
-// Function to update the UI with the calculated dropout rate
 function updateDropoutRate() {
     const selectedPolicy = policySelect.value;
+
     const dropoutRate = calculateDropoutRate(selectedPolicy);
     const dropoutRateElement = document.getElementById('dropoutRate');
     dropoutRateElement.textContent = `Dropout Rate: ${dropoutRate.toFixed(2)}%`;

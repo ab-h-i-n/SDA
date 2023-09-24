@@ -15,6 +15,7 @@
         <form id="dataForm">
             <label for="policy">Select Policy:</label>
             <select id="policy" name="policy">
+                <option value="" selected>Select</option>
                 <option value="school">School Wise</option>
                 <option value="area">Area Wise</option>
                 <option value="gender">Gender Wise</option>
@@ -24,35 +25,45 @@
             <br><br>
     
             <!-- Selection Divs for Policy Types (Initially Hidden) -->
-            <div id="schoolSelect" style="display: none;">
-                <label for="school">Select School:</label>
-                <select id="school" name="school"></select>
-                <br><br>
-            </div>
-    
-            <div id="ageSelect" style="display: none;">
-                <label for="age">Select Age:</label>
-                <select id="age" name="age"></select>
-                <br><br>
-            </div>
-    
-            <div id="casteSelect" style="display: none;">
-                <label for="caste">Select Caste:</label>
-                <select id="caste" name="caste"></select>
-                <br><br>
-            </div>
-    
-            <div id="areaSelect" style="display: none;">
-                <label for="area">Select Area:</label>
-                <select id="area" name="area"></select>
-                <br><br>
-            </div>
-    
-            <div id="genderSelect" style="display: none;">
-                <label for="gender">Select Gender:</label>
-                <select id="gender" name="gender"></select>
-                <br><br>
-            </div>
+<div id="schoolSelect" class="second-select" style="display: none;">
+    <label for="school">Select School:</label>
+    <select id="school" name="school">
+        <option value="">Select</option>
+    </select>
+    <br><br>
+</div>
+
+<div id="ageSelect" class="second-select" style="display: none;">
+    <label for="age">Select Age:</label>
+    <select id="age" name="age">
+        <option value="">Select</option>
+    </select>
+    <br><br>
+</div>
+
+<div id="casteSelect" class="second-select" style="display: none;">
+    <label for="caste">Select Caste:</label>
+    <select id="caste" name="caste">
+        <option value="">Select</option>
+    </select>
+    <br><br>
+</div>
+
+<div id="areaSelect" class="second-select" style="display: none;">
+    <label for="area">Select Area:</label>
+    <select id="area" name="area">
+        <option value="">Select</option>
+    </select>
+    <br><br>
+</div>
+
+<div id="genderSelect" class="second-select" style="display: none;">
+    <label for="gender">Select Gender:</label>
+    <select id="gender" name="gender">
+        <option value="">Select</option>
+    </select>
+    <br><br>
+</div>
             <div id="dropoutRate" style="display: none;"></div>
             <input type="submit" value="Submit" id="submit">
         </form>
